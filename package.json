@@ -1,0 +1,15 @@
+{
+  "name": "com.uextension.navigation",
+  "displayName": "UEX Navigation",
+  "description": "Unity navigation system",
+  "author": {
+    "name": "UExtension"
+  },
+  "license": "MIT",
+  "version": "1.0.0",
+  "unity": "2022.3",
+  "dependencies": {
+    "com.cysharp.unitask": "2.5.10"
+  },
+  "hideInEditor": false
+}

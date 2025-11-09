@@ -1,0 +1,17 @@
+{
+    "name": "com.uextension.navigation",
+    "rootNamespace": "UExtension.Navigation",
+    "references": [
+        "UniTask",
+        "com.uextension.sceneloader"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
