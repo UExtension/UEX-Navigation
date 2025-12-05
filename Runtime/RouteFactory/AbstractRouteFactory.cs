@@ -1,8 +1,6 @@
 using System.Collections.Generic;
-using System.IO;
 using UExtension.Navigation.Route;
 using UExtension.SceneLoader.ScriptableObjects;
-using UnityEditor;
 using UnityEngine;
 
 namespace UExtension.Navigation.RouteFactory
@@ -20,27 +18,6 @@ namespace UExtension.Navigation.RouteFactory
 
         [field: SerializeField]
         public SceneContainer BakingSetActiveScene { get; private set; }
-
-        #region Editor
-
-#if UNITY_EDITOR
-        private void OnValidate()
-        {
-            var fileName = Path.GetFileNameWithoutExtension(AssetDatabase.GetAssetPath(this));
-            if (fileName == Name) return;
-
-            Name = fileName;
-
-            if (ActiveScene == null && Scenes.Count > 0)
-            {
-                ActiveScene = Scenes[0];
-            }
-
-            EditorUtility.SetDirty(this);
-        }
-#endif
-
-        #endregion
 
         public abstract IRoute Create();
 
