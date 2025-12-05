@@ -8,21 +8,13 @@ using UnityEngine;
 
 namespace UExtension.Navigation
 {
-    public class Navigator : ScriptableObject
+    public static class Navigator
     {
         private const string LoggingPrefix = "<color=#DE00C8>[Navigation]</color>";
 
         private static IRoute _route;
 
-        [field: SerializeField]
-        public bool ActiveLogging { get; set; }
-
-        private static bool StaticActiveLogging { get; set; }
-
-        private void OnEnable()
-        {
-            StaticActiveLogging = ActiveLogging;
-        }
+        public static bool Logging { get; set; }
 
         public static event Action<IRoute> OnRouteLoadStart = delegate { };
         public static event Action<IRoute> OnRouteLoadEnd = delegate { };
@@ -38,7 +30,7 @@ namespace UExtension.Navigation
         {
             _route = _route.Push(route);
 
-            if (StaticActiveLogging)
+            if (Logging)
             {
                 Debug.Log($"{LoggingPrefix} Push: {route.Name}");
                 Debug.Log($"{LoggingPrefix} {_route.GetRoot().ToString()}");
@@ -50,14 +42,14 @@ namespace UExtension.Navigation
         /// <inheritdoc cref="IRoute.Pop"/>
         public static async UniTask Pop()
         {
-            if (StaticActiveLogging)
+            if (Logging)
             {
                 Debug.Log($"{LoggingPrefix} Pop: {_route.Name}");
             }
 
             _route = _route.Pop();
 
-            if (StaticActiveLogging)
+            if (Logging)
             {
                 Debug.Log($"{LoggingPrefix} {_route.GetRoot().ToString()}");
             }
@@ -80,7 +72,7 @@ namespace UExtension.Navigation
         {
             _route = _route.Navigate(route);
 
-            if (StaticActiveLogging)
+            if (Logging)
             {
                 Debug.Log($"{LoggingPrefix} Navigate: {route.Name}");
                 Debug.Log($"{LoggingPrefix} {_route.GetRoot().ToString()}");
@@ -145,7 +137,7 @@ namespace UExtension.Navigation
             _route = _route.Pop();
             _route = _route.Push(route);
 
-            if (StaticActiveLogging)
+            if (Logging)
             {
                 Debug.Log($"{LoggingPrefix} Replace: {route.Name}");
                 Debug.Log($"{LoggingPrefix} {_route.GetRoot().ToString()}");
@@ -168,7 +160,7 @@ namespace UExtension.Navigation
         {
             _route = route;
 
-            if (StaticActiveLogging)
+            if (Logging)
             {
                 Debug.Log($"{LoggingPrefix} Root: {route.Name}");
                 Debug.Log($"{LoggingPrefix} {_route.GetRoot().ToString()}");
@@ -182,7 +174,7 @@ namespace UExtension.Navigation
         /// </summary>
         public static async UniTask Reload()
         {
-            if (StaticActiveLogging)
+            if (Logging)
             {
                 Debug.Log($"{LoggingPrefix} Reload: {_route.GetTip().Name}");
                 Debug.Log($"{LoggingPrefix} {_route.GetRoot().ToString()}");
