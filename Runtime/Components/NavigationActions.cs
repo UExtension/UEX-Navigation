@@ -7,6 +7,9 @@ namespace UExtension.Navigation.Components
 {
     public class NavigationActions : ScriptableObject
     {
+        [field: SerializeField, HideInInspector]
+        public bool Logging { get; private set; } = true;
+
         public void Push(AbstractRouteFactory route)
         {
             NavigationService.Push(route).Forget();
@@ -40,6 +43,12 @@ namespace UExtension.Navigation.Components
         public void Reload()
         {
             NavigationService.Reload().Forget();
+        }
+
+        public void SetLogging(bool value)
+        {
+            Logging = value;
+            NavigationService.Logging = value;
         }
     }
 }

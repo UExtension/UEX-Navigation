@@ -14,7 +14,7 @@ namespace UExtension.Navigation
 
         private static IRoute _route;
 
-        public static bool Logging { get; set; }
+        public static bool Logging { get; set; } = true;
 
         public static event Action<IRoute> OnRouteLoadStart = delegate { };
         public static event Action<IRoute> OnRouteLoadEnd = delegate { };
