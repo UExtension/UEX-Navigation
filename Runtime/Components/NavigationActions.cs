@@ -1,4 +1,6 @@
+using Cysharp.Threading.Tasks;
 using UExtension.Navigation.RouteFactory;
+using UExtension.Navigation.RouteFactory.Tab;
 using UnityEngine;
 
 namespace UExtension.Navigation.Components
@@ -7,27 +9,37 @@ namespace UExtension.Navigation.Components
     {
         public void Push(AbstractRouteFactory route)
         {
-            _ = NavigationService.Push(route);
-        }
-
-        public void Navigate(AbstractRouteFactory route)
-        {
-            _ = NavigationService.Navigate(route);
+            NavigationService.Push(route).Forget();
         }
 
         public void Pop()
         {
-            _ = NavigationService.Pop();
+            NavigationService.Pop().Forget();
+        }
+
+        public void Navigate(AbstractRouteFactory route)
+        {
+            NavigationService.Navigate(route).Forget();
+        }
+
+        public void SetTab(TabRouteFactory tabRouteFactory, AbstractRouteFactory tabFactory)
+        {
+            NavigationService.SetTab(tabRouteFactory, tabFactory).Forget();
         }
 
         public void Replace(AbstractRouteFactory route)
         {
-            _ = NavigationService.Replace(route);
+            NavigationService.Replace(route).Forget();
         }
 
         public void Root(AbstractRouteFactory route)
         {
-            _ = NavigationService.Root(route);
+            NavigationService.Root(route).Forget();
+        }
+
+        public void Reload()
+        {
+            NavigationService.Reload().Forget();
         }
     }
 }
