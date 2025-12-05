@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace UExtension.Navigation
 {
-    public static class Navigator
+    public static class NavigationService
     {
         private const string LoggingPrefix = "<color=#DE00C8>[Navigation]</color>";
 

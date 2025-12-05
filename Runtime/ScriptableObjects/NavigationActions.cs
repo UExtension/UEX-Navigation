@@ -7,27 +7,27 @@ namespace UExtension.Navigation.ScriptableObjects
     {
         public void Push(AbstractRouteFactory route)
         {
-            _ = Navigator.Push(route);
+            _ = NavigationService.Push(route);
         }
 
         public void Navigate(AbstractRouteFactory route)
         {
-            _ = Navigator.Navigate(route);
+            _ = NavigationService.Navigate(route);
         }
 
         public void Pop()
         {
-            _ = Navigator.Pop();
+            _ = NavigationService.Pop();
         }
 
         public void Replace(AbstractRouteFactory route)
         {
-            _ = Navigator.Replace(route);
+            _ = NavigationService.Replace(route);
         }
 
         public void Root(AbstractRouteFactory route)
         {
-            _ = Navigator.Root(route);
+            _ = NavigationService.Root(route);
         }
     }
 }

@@ -14,14 +14,14 @@ namespace UExtension.Navigation.Components
 
         private void Awake()
         {
-            Navigator.OnRouteLoadStart += HandleRouteLoadStart;
-            Navigator.OnRouteLoadEnd += HandleRouteLoadEnd;
+            NavigationService.OnRouteLoadStart += HandleRouteLoadStart;
+            NavigationService.OnRouteLoadEnd += HandleRouteLoadEnd;
         }
 
         private void OnDestroy()
         {
-            Navigator.OnRouteLoadStart -= HandleRouteLoadStart;
-            Navigator.OnRouteLoadEnd -= HandleRouteLoadEnd;
+            NavigationService.OnRouteLoadStart -= HandleRouteLoadStart;
+            NavigationService.OnRouteLoadEnd -= HandleRouteLoadEnd;
         }
 
         private void HandleRouteLoadStart(IRoute route)
