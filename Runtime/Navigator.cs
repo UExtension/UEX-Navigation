@@ -89,7 +89,7 @@ namespace UExtension.Navigation
             await LoadRouteAsync(_route.GetTip());
         }
 
-        /// <inheritdoc cref="SetTab(UExtension.Navigation.ScriptableObjects.Route.Tab.TabRouteFactory,UExtension.Navigation.ScriptableObjects.Route.Tab.TabFactory)"/>
+        /// <inheritdoc cref="SetTab(UExtension.Navigation.Route.Tab.TabRoute,UExtension.Navigation.Route.IRoute)"/>
         public static async UniTask SetTab(TabRouteFactory tabRouteFactory, IRouteFactory tabFactory)
         {
             await SetTab(tabRouteFactory.CreateTyped(), tabFactory.Create());
