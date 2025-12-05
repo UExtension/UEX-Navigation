@@ -5,7 +5,7 @@ using UExtension.SceneLoader.ScriptableObjects;
 using UnityEditor;
 using UnityEngine;
 
-namespace UExtension.Navigation.ScriptableObjects.Route
+namespace UExtension.Navigation.RouteFactory
 {
     public abstract class AbstractRouteFactory : ScriptableObject, IRouteFactory
     {

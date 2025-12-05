@@ -2,7 +2,7 @@ using UExtension.Navigation.Route;
 using UExtension.Navigation.Route.Stack;
 using UnityEngine;
 
-namespace UExtension.Navigation.ScriptableObjects.Route.Stack
+namespace UExtension.Navigation.RouteFactory.Stack
 {
     [CreateAssetMenu(menuName = "UExtension/Navigation/StackRoute", fileName = "StackRoute")]
     public class StackRouteFactory : AbstractRouteFactory

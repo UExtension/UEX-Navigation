@@ -2,8 +2,8 @@ using System;
 using Cysharp.Threading.Tasks;
 using UExtension.Navigation.Route;
 using UExtension.Navigation.Route.Tab;
-using UExtension.Navigation.ScriptableObjects.Route;
-using UExtension.Navigation.ScriptableObjects.Route.Tab;
+using UExtension.Navigation.RouteFactory;
+using UExtension.Navigation.RouteFactory.Tab;
 using UnityEngine;
 
 namespace UExtension.Navigation
@@ -122,7 +122,7 @@ namespace UExtension.Navigation
             return _route.Search(route);
         }
 
-        /// <inheritdoc cref="Replace(UExtension.Navigation.ScriptableObjects.Route.IRouteFactory)"/>
+        /// <inheritdoc cref="Replace(IRouteFactory)"/>
         public static async UniTask Replace(IRouteFactory routeFactory)
         {
             await Replace(routeFactory.Create());
@@ -146,7 +146,7 @@ namespace UExtension.Navigation
             await LoadRouteAsync(_route.GetTip());
         }
 
-        /// <inheritdoc cref="Root(UExtension.Navigation.ScriptableObjects.Route.IRouteFactory)"/>
+        /// <inheritdoc cref="Root(IRouteFactory)"/>
         public static async UniTask Root(IRouteFactory routeFactory)
         {
             await Root(routeFactory.Create());

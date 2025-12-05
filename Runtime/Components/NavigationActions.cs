@@ -1,7 +1,7 @@
-using UExtension.Navigation.ScriptableObjects.Route;
+using UExtension.Navigation.RouteFactory;
 using UnityEngine;
 
-namespace UExtension.Navigation.ScriptableObjects
+namespace UExtension.Navigation.Components
 {
     public class NavigationActions : ScriptableObject
     {

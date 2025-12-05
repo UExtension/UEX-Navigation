@@ -3,7 +3,7 @@ using UExtension.Navigation.Route;
 using UExtension.Navigation.Route.Tab;
 using UnityEngine;
 
-namespace UExtension.Navigation.ScriptableObjects.Route.Tab
+namespace UExtension.Navigation.RouteFactory.Tab
 {
     [CreateAssetMenu(menuName = "UExtension/Navigation/TabRoute", fileName = "TabRoute")]
     public class TabRouteFactory : AbstractRouteFactory

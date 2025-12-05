@@ -1,6 +1,6 @@
 using UExtension.Navigation.Route;
 
-namespace UExtension.Navigation.ScriptableObjects.Route
+namespace UExtension.Navigation.RouteFactory
 {
     public interface IRouteFactory
     {
