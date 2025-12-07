@@ -82,6 +82,11 @@ namespace UExtension.Navigation.Route.Tab
             return GetTip();
         }
 
+        public List<IRoute> GetTabs()
+        {
+            return new List<IRoute>(Tabs.Values);
+        }
+
         public override bool Equals(IRoute other)
         {
             if (other is TabRoute tabRoute)
