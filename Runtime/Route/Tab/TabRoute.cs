@@ -10,17 +10,23 @@ namespace UExtension.Navigation.Route.Tab
     {
         private Dictionary<string, IRoute> Tabs { get; } = new();
 
-        private IRoute ActiveTab { get; set; }
+        private IRoute _activeTab;
+
+        public IRoute ActiveTab
+        {
+            get => _activeTab;
+            set => _activeTab = Tabs[value.Name];
+        }
 
         public TabRoute(string name, List<SceneContainer> scenes, SceneContainer activeScene, SceneContainer bakingSetScene, IRoute[] tabs,
             IRoute activeTab) : base(name, scenes, activeScene, bakingSetScene)
         {
-            ActiveTab = activeTab;
             foreach (var tab in tabs)
             {
                 Tabs.Add(tab.Name, tab);
                 tab.Previous = this;
             }
+            ActiveTab = activeTab;
         }
 
         /// <inheritdoc cref="AbstractRoute.Next"/>
@@ -56,7 +62,7 @@ namespace UExtension.Navigation.Route.Tab
         {
             if (Equals(route))
             {
-                SetTab(((TabRoute)route).ActiveTab);
+                ActiveTab = ((TabRoute)route).ActiveTab;
                 return GetTip();
             }
 
@@ -74,12 +80,12 @@ namespace UExtension.Navigation.Route.Tab
         /// <param name="tab">The route to set as the active tab.</param>
         /// <returns>The updated route tip after the operation.</returns>
         /// <exception cref="ArgumentException">Thrown when the given route doesn't exist in the Tabs collection.</exception>
-        public IRoute SetTab(IRoute tab)
+        public bool TrySetActiveTab(IRoute tab)
         {
-            if (!Tabs.TryGetValue(tab.Name, out var internalTab)) throw new ArgumentException($"Tab {tab.Name} not found in Tabs collection.");
+            if (!Tabs.TryGetValue(tab.Name, out var internalTab)) return false;
 
             ActiveTab = internalTab;
-            return GetTip();
+            return true;
         }
 
         public List<IRoute> GetTabs()

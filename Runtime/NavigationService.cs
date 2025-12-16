@@ -94,7 +94,7 @@ namespace UExtension.Navigation
         /// <param name="tab">The tab to set active.</param>
         public static async UniTask SetTab(TabRoute tabRoute, IRoute tab)
         {
-            tabRoute.SetTab(tab);
+            tabRoute.ActiveTab = tab;
             await Navigate(tabRoute);
         }
 
