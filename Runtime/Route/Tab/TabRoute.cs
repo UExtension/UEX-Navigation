@@ -63,20 +63,19 @@ namespace UExtension.Navigation.Route.Tab
             return Next.Push(route);
         }
 
-        /// <inheritdoc cref="AbstractRoute.Pop"/>
         public override IRoute Pop()
         {
-            // If the Active Tab has a next route, asks it to pop
-            if (Next.HasNext())
+            return Previous?.Pop(this) ?? GetTip();
+        }
+
+        public override IRoute Pop(IRoute route)
+        {
+            if (HasNext() && Next.Equals(route))
             {
-                return Next.Pop();
+                return Pop();
             }
 
-            // If previous => pop me
-            if (HasPrevious()) return Previous.Pop();
-
-            // I'm the root => return me
-            return GetTip();
+            return Previous?.Pop(route) ?? GetTip();
         }
 
         public override IRoute Navigate(IRoute route)

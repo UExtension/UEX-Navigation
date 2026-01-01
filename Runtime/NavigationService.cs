@@ -39,7 +39,9 @@ namespace UExtension.Navigation
             await LoadRouteAsync(_route.GetTip());
         }
 
-        /// <inheritdoc cref="IRoute.Pop"/>
+        /// <summary>
+        /// Removes the tip of the current route stack.
+        /// </summary>
         public static async UniTask Pop()
         {
             if (Logging)

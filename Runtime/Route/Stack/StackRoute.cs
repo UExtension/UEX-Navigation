@@ -5,53 +5,45 @@ namespace UExtension.Navigation.Route.Stack
 {
     public class StackRoute : AbstractRoute
     {
-        public StackRoute(string name, List<SceneContainer> scenes, SceneContainer activeScene, SceneContainer bakingSetScene) : base(name, scenes, activeScene, bakingSetScene)
-        {
-        }
+        public StackRoute(string name, List<SceneContainer> scenes, SceneContainer activeScene, SceneContainer bakingSetScene) : base(name, scenes, activeScene, bakingSetScene) {}
 
         public override IRoute Push(IRoute route)
         {
-            if (HasNext()) return Next.Push(route);
+            if (HasNext())
+            {
+                Next.Previous = null;
+            }
 
             Next = route;
             Next.Previous = this;
             return GetTip();
         }
 
-        /// <inheritdoc cref="AbstractRoute.Pop"/>
         public override IRoute Pop()
         {
-            // If I have a next route
-            if (HasNext())
-            {
-                // And it has a next route => ask it to pop
-                if (Next.HasNext())
-                {
-                    return Next.Pop();
-                }
+            return Previous?.Pop(this) ?? GetTip();
+        }
 
-                // Otherwise pop it and return me
+        public override IRoute Pop(IRoute route)
+        {
+            if (HasNext() && Next.Equals(route))
+            {
                 Next = null;
                 return GetTip();
             }
 
-            // If previous => pop me
-            if (HasPrevious()) return Previous.Pop();
-
-            // I'm the root => return me
-            return GetTip();
+            return Previous?.Pop(route) ?? GetTip();
         }
 
         public override IRoute Navigate(IRoute route)
         {
-            // If I'm the route to be navigated to => Pop Next and return me
             if (Equals(route))
             {
                 Next = null;
                 return GetTip();
             }
 
-            return Previous?.Navigate(route) ?? Push(route);
+            return Previous?.Navigate(route) ?? GetTip().Push(route);
         }
 
         public override IRoute GetTip()

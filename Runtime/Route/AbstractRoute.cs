@@ -45,9 +45,8 @@ namespace UExtension.Navigation.Route
         public virtual int Depth { get; protected set; }
 
         public abstract IRoute Push(IRoute route);
-
         public abstract IRoute Pop();
-
+        public abstract IRoute Pop(IRoute route);
         public abstract IRoute Navigate(IRoute route);
 
         public virtual IRoute GetRoot()

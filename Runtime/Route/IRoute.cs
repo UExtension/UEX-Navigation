@@ -59,20 +59,26 @@ namespace UExtension.Navigation.Route
         int Depth { get; }
 
         /// <summary>
-        /// Adds the given route as the tip of the current route stack.
+        /// Adds the given route as the next route.
         /// </summary>
         /// <param name="route">The route to be added.</param>
         /// <returns>The updated route tip after the operation.</returns>
         public IRoute Push(IRoute route);
 
         /// <summary>
-        /// Removes the tip of the current route stack.
+        /// Removes this route from the current route stack if <see cref="HasPrevious"/>.
         /// </summary>
         /// <returns>The updated route tip after the operation.</returns>
         public IRoute Pop();
 
         /// <summary>
-        /// Navigates backwards to the specified route, pushes it if it does not exist in history.
+        /// Removes the given route from the current route stack if <see cref="HasPrevious"/>.
+        /// </summary>
+        /// <returns>The updated route tip after the operation.</returns>
+        public IRoute Pop(IRoute route);
+        
+        /// <summary>
+        /// Navigates backwards to the specified route, pushes it as the tip if it does not exist in history.
         /// </summary>
         /// <param name="route">The route to navigate to.</param>
         /// <returns>The updated route tip after the operation.</returns>
