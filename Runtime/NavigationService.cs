@@ -20,13 +20,13 @@ namespace UExtension.Navigation
         public static event Action<IRoute> OnRouteLoadEnd = delegate {};
 
         /// <inheritdoc cref="IRoute.Push"/>
-        public static async UniTask Push(IRouteFactory routeFactory)
+        public static async UniTask<IRoute> Push(IRouteFactory routeFactory)
         {
-            await Push(routeFactory.Create());
+            return await Push(routeFactory.Create());
         }
 
         /// <inheritdoc cref="IRoute.Push"/>
-        public static async UniTask Push(IRoute route)
+        public static async UniTask<IRoute> Push(IRoute route)
         {
             _route = _route.Push(route);
 
@@ -36,13 +36,13 @@ namespace UExtension.Navigation
                 Debug.Log($"{LoggingPrefix} {_route.GetRoot().ToString()}");
             }
 
-            await LoadRouteAsync(_route.GetTip());
+            return await LoadRouteAsync(_route.GetTip());
         }
 
         /// <summary>
         /// Removes the tip of the current route stack.
         /// </summary>
-        public static async UniTask Pop()
+        public static async UniTask<IRoute> Pop()
         {
             if (Logging)
             {
@@ -56,21 +56,21 @@ namespace UExtension.Navigation
                 Debug.Log($"{LoggingPrefix} {_route.GetRoot().ToString()}");
             }
 
-            await LoadRouteAsync(_route.GetTip());
+            return await LoadRouteAsync(_route.GetTip());
         }
 
         /// <summary>
         /// <inheritdoc cref="IRoute.Navigate"/>
         /// </summary>
-        public static async UniTask Navigate(IRouteFactory routeFactory)
+        public static async UniTask<IRoute> Navigate(IRouteFactory routeFactory)
         {
-            await Navigate(routeFactory.Create());
+            return await Navigate(routeFactory.Create());
         }
 
         /// <summary>
         /// <inheritdoc cref="IRoute.Navigate"/>
         /// </summary>
-        public static async UniTask Navigate(IRoute route)
+        public static async UniTask<IRoute> Navigate(IRoute route)
         {
             _route = _route.Navigate(route);
 
@@ -80,13 +80,13 @@ namespace UExtension.Navigation
                 Debug.Log($"{LoggingPrefix} {_route.GetRoot().ToString()}");
             }
 
-            await LoadRouteAsync(_route.GetTip());
+            return await LoadRouteAsync(_route.GetTip());
         }
 
         /// <inheritdoc cref="SetTab(UExtension.Navigation.Route.Tab.TabRoute,UExtension.Navigation.Route.IRoute)"/>
-        public static async UniTask SetTab(TabRouteFactory tabRouteFactory, IRouteFactory tabFactory)
+        public static async UniTask<IRoute> SetTab(TabRouteFactory tabRouteFactory, IRouteFactory tabFactory)
         {
-            await SetTab(tabRouteFactory.CreateTyped(), tabFactory.Create());
+            return await SetTab(tabRouteFactory.CreateTyped(), tabFactory.Create());
         }
 
         /// <summary>
@@ -94,10 +94,10 @@ namespace UExtension.Navigation
         /// </summary>
         /// <param name="tabRoute">The route to navigate to.</param>
         /// <param name="tab">The tab to set active.</param>
-        public static async UniTask SetTab(TabRoute tabRoute, IRoute tab)
+        public static async UniTask<IRoute> SetTab(TabRoute tabRoute, IRoute tab)
         {
             tabRoute.ActiveTab = tab;
-            await Navigate(tabRoute);
+            return await Navigate(tabRoute);
         }
 
         /// <inheritdoc cref="IRoute.GetRoot"/>
@@ -125,16 +125,16 @@ namespace UExtension.Navigation
         }
 
         /// <inheritdoc cref="Replace(IRouteFactory)"/>
-        public static async UniTask Replace(IRouteFactory routeFactory)
+        public static async UniTask<IRoute> Replace(IRouteFactory routeFactory)
         {
-            await Replace(routeFactory.Create());
+            return await Replace(routeFactory.Create());
         }
 
         /// <summary>
         /// Replaces the tip of the current route stack by the given route.
         /// </summary>
         /// <param name="route">The route replacing the tip.</param>
-        public static async UniTask Replace(IRoute route)
+        public static async UniTask<IRoute> Replace(IRoute route)
         {
             _route = _route.Pop();
             _route = _route.Push(route);
@@ -145,20 +145,20 @@ namespace UExtension.Navigation
                 Debug.Log($"{LoggingPrefix} {_route.GetRoot().ToString()}");
             }
 
-            await LoadRouteAsync(_route.GetTip());
+            return await LoadRouteAsync(_route.GetTip());
         }
 
         /// <inheritdoc cref="Root(IRouteFactory)"/>
-        public static async UniTask Root(IRouteFactory routeFactory)
+        public static async UniTask<IRoute> Root(IRouteFactory routeFactory)
         {
-            await Root(routeFactory.Create());
+            return await Root(routeFactory.Create());
         }
 
         /// <summary>
         /// Replaces the current root and its history by the given route.
         /// </summary>
         /// <param name="route">The route replacing the root.</param>
-        public static async UniTask Root(IRoute route)
+        public static async UniTask<IRoute> Root(IRoute route)
         {
             route.Previous = null;
             _route = route.GetTip();
@@ -169,13 +169,13 @@ namespace UExtension.Navigation
                 Debug.Log($"{LoggingPrefix} {_route.GetRoot().ToString()}");
             }
 
-            await LoadRouteAsync(_route.GetTip());
+            return await LoadRouteAsync(_route.GetTip());
         }
 
         /// <summary>
         /// Asks the <see cref="SceneLoader"/> to reload the current route tip.
         /// </summary>
-        public static async UniTask Reload()
+        public static async UniTask<IRoute> Reload()
         {
             if (Logging)
             {
@@ -183,7 +183,7 @@ namespace UExtension.Navigation
                 Debug.Log($"{LoggingPrefix} {_route.GetRoot().ToString()}");
             }
 
-            await LoadRouteAsync(_route.GetTip());
+            return await LoadRouteAsync(_route.GetTip());
         }
 
         public static bool IsRouteReady()
@@ -196,7 +196,7 @@ namespace UExtension.Navigation
         /// </summary>
         /// <param name="route">The route whose associated scene group will be loaded.</param>
         /// <returns>A task that represents the asynchronous operation of loading the scene group.</returns>
-        private static async UniTask LoadRouteAsync(IRoute route)
+        private static async UniTask<IRoute> LoadRouteAsync(IRoute route)
         {
             OnRouteLoadStart.Invoke(route);
             await SceneLoader.SceneLoader.SetActiveSceneContainers(route.Scenes);
@@ -212,6 +212,7 @@ namespace UExtension.Navigation
             }
 
             OnRouteLoadEnd.Invoke(route);
+            return route;
         }
     }
 }
