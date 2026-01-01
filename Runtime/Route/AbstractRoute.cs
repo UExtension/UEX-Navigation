@@ -6,6 +6,8 @@ namespace UExtension.Navigation.Route
 {
     public abstract class AbstractRoute : IEquatable<IRoute>, IRoute
     {
+        protected IRoute _previous;
+
         protected AbstractRoute(string name, List<SceneContainer> scenes, SceneContainer activeScene, SceneContainer bakingSetScene)
         {
             Name = name;
@@ -19,14 +21,28 @@ namespace UExtension.Navigation.Route
             return Name == other?.Name;
         }
 
-        public string Name { get; }
-        public List<SceneContainer> Scenes { get; }
-        public SceneContainer ActiveScene { get; }
-        public SceneContainer BakingSetActiveScene { get; }
-        public virtual IRoute Previous { get; set; }
+        public virtual string Name { get; }
+        public virtual List<SceneContainer> Scenes { get; }
+        public virtual SceneContainer ActiveScene { get; }
+        public virtual SceneContainer BakingSetActiveScene { get; }
+
+        public virtual IRoute Previous
+        {
+            get => _previous;
+            set
+            {
+                _previous = value;
+
+                // Calculate the depth
+                Depth = _previous?.Depth + 1 ?? 0;
+                if (Next != null) Next.Previous = this;
+            }
+        }
+
         public virtual IRoute Next { get; set; }
         public virtual bool IsSelfActive { get; set; } = true;
         public virtual bool IsActive => (Previous?.IsActive ?? true) && IsSelfActive;
+        public virtual int Depth { get; protected set; }
 
         public abstract IRoute Push(IRoute route);
 

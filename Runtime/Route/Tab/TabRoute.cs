@@ -37,6 +37,19 @@ namespace UExtension.Navigation.Route.Tab
             ActiveTab = activeTab;
         }
 
+        public override IRoute Previous
+        {
+            get => base.Previous;
+            set
+            {
+                base.Previous = value;
+                foreach (var (_, tab) in Tabs)
+                {
+                    tab.Previous = this;
+                }
+            }
+        }
+
         /// <inheritdoc cref="AbstractRoute.Next"/>
         /// <exception cref="InvalidOperationException">Manually setting the Next route is forbidden. State changes should be performed internally or using Push, Pop, Navigate...</exception>
         public override IRoute Next

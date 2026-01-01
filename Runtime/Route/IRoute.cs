@@ -52,7 +52,12 @@ namespace UExtension.Navigation.Route
         /// </summary>
         /// <returns><see langword="true"/> if this route is active in the stack; otherwise, <see langword="false"/>.</returns>
         bool IsActive { get; }
-      
+
+        /// <summary>
+        /// Gets the depth of this route in the stack.
+        /// </summary>
+        int Depth { get; }
+
         /// <summary>
         /// Adds the given route as the tip of the current route stack.
         /// </summary>
