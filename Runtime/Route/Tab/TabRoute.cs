@@ -15,7 +15,7 @@ namespace UExtension.Navigation.Route.Tab
         public IRoute ActiveTab
         {
             get => _activeTab;
-            set
+            private set
             {
                 if (_activeTab != null) _activeTab.IsSelfActive = false;
 
@@ -101,6 +101,17 @@ namespace UExtension.Navigation.Route.Tab
         /// <param name="tab">The route to set as the active tab.</param>
         /// <returns>The updated route tip after the operation.</returns>
         /// <exception cref="ArgumentException">Thrown when the given route doesn't exist in the Tabs collection.</exception>
+        public IRoute SetActiveTab(IRoute tab)
+        {
+            ActiveTab = tab;
+            return GetTip();
+        }
+
+        /// <summary>
+        /// Tries to set the active tab to the specified route.
+        /// </summary>
+        /// <param name="tab">The route to set as the active tab.</param>
+        /// <returns><see langword="true"/> if the tab has been set; otherwise, <see langword="false"/>.</returns>
         public bool TrySetActiveTab(IRoute tab)
         {
             if (!Tabs.TryGetValue(tab.Name, out var internalTab)) return false;
