@@ -11,7 +11,7 @@ namespace UExtension.Navigation.Route.Stack
 
         public override IRoute Push(IRoute route)
         {
-            if (Next != null) return Next.Push(route);
+            if (HasNext()) return Next.Push(route);
 
             Next = route;
             Next.Previous = this;

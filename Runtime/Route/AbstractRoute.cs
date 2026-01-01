@@ -35,7 +35,7 @@ namespace UExtension.Navigation.Route
 
                 // Calculate the depth
                 Depth = _previous?.Depth + 1 ?? 0;
-                if (Next != null) Next.Previous = this;
+                if (HasNext()) Next.Previous = this;
             }
         }
 
