@@ -36,10 +36,7 @@ namespace UExtension.Navigation
             return await LoadRouteAsync(_route.Push(route));
         }
 
-        /// <summary>
-        /// Removes the tip of the current route stack.
-        /// </summary>
-        /// <returns>The updated route tip after the operation.</returns>
+        /// <inheritdoc cref="IRoute.Pop()"/>
         public static async UniTask<IRoute> Pop()
         {
             if (Logging)
@@ -50,9 +47,18 @@ namespace UExtension.Navigation
             return await LoadRouteAsync(_route.Pop());
         }
 
-        /// <summary>
+        /// <inheritdoc cref="IRoute.Pop(IRoute)"/>
+        public static async UniTask<IRoute> Pop(IRoute route)
+        {
+            if (Logging)
+            {
+                Debug.Log($"{LoggingPrefix} Pop: {route.Name}");
+            }
+
+            return await LoadRouteAsync(_route.Pop(route));
+        }
+
         /// <inheritdoc cref="IRoute.Navigate"/>
-        /// </summary>
         public static async UniTask<IRoute> Navigate(IRouteFactory routeFactory)
         {
             return await Navigate(routeFactory.Create());
@@ -89,8 +95,7 @@ namespace UExtension.Navigation
                 Debug.Log($"{LoggingPrefix} Set tab {tab.Name} to {tabRoute.Name}");
             }
 
-            tabRoute.ActiveTab = tab;
-            return await Navigate(tabRoute);
+            return await LoadRouteAsync(tabRoute.SetActiveTab(tab));
         }
 
         /// <inheritdoc cref="IRoute.GetRoot"/>
@@ -155,6 +160,7 @@ namespace UExtension.Navigation
             }
 
             route.Previous = null;
+            route.IsSelfActive = true;
 
             return await LoadRouteAsync(route);
         }
