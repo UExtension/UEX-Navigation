@@ -25,15 +25,7 @@ namespace UExtension.Navigation.Route
         public SceneContainer BakingSetActiveScene { get; }
         public virtual IRoute Previous { get; set; }
         public virtual IRoute Next { get; set; }
-
-        protected bool IsSelfActive { get; set; } = true;
-
-        bool IRoute.IsSelfActive
-        {
-            get => IsSelfActive;
-            set => IsSelfActive = value;
-        }
-
+        public virtual bool IsSelfActive { get; set; } = true;
         public virtual bool IsActive => (Previous?.IsActive ?? true) && IsSelfActive;
 
         public abstract IRoute Push(IRoute route);
