@@ -42,6 +42,18 @@ namespace UExtension.Navigation.Route
         public IRoute Next { get; set; }
 
         /// <summary>
+        /// Determines whether this route is active
+        /// </summary>
+        /// <returns><see langword="true"/> if this route is active; otherwise, <see langword="false"/>.</returns>
+        bool IsSelfActive { get; internal set; }
+
+        /// <summary>
+        /// Determines whether this route is active in the stack
+        /// </summary>
+        /// <returns><see langword="true"/> if this route is active in the stack; otherwise, <see langword="false"/>.</returns>
+        bool IsActive { get; }
+      
+        /// <summary>
         /// Adds the given route as the tip of the current route stack.
         /// </summary>
         /// <param name="route">The route to be added.</param>

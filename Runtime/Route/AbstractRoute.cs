@@ -26,13 +26,23 @@ namespace UExtension.Navigation.Route
         public virtual IRoute Previous { get; set; }
         public virtual IRoute Next { get; set; }
 
+        protected bool IsSelfActive { get; set; } = true;
+
+        bool IRoute.IsSelfActive
+        {
+            get => IsSelfActive;
+            set => IsSelfActive = value;
+        }
+
+        public virtual bool IsActive => (Previous?.IsActive ?? true) && IsSelfActive;
+
         public abstract IRoute Push(IRoute route);
 
         public abstract IRoute Pop();
 
         public abstract IRoute Navigate(IRoute route);
 
-        public IRoute GetRoot()
+        public virtual IRoute GetRoot()
         {
             return Previous?.GetRoot() ?? this;
         }
@@ -44,12 +54,12 @@ namespace UExtension.Navigation.Route
             return Equals(route) ? this : Previous?.Search(route);
         }
 
-        public bool HasPrevious()
+        public virtual bool HasPrevious()
         {
             return Previous != null;
         }
 
-        public bool HasNext()
+        public virtual bool HasNext()
         {
             return Next != null;
         }

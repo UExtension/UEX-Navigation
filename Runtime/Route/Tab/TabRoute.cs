@@ -15,7 +15,13 @@ namespace UExtension.Navigation.Route.Tab
         public IRoute ActiveTab
         {
             get => _activeTab;
-            set => _activeTab = Tabs[value.Name];
+            set
+            {
+                if (_activeTab != null) _activeTab.IsSelfActive = false;
+
+                _activeTab = Tabs[value.Name];
+                _activeTab.IsSelfActive = true;
+            }
         }
 
         public TabRoute(string name, List<SceneContainer> scenes, SceneContainer activeScene, SceneContainer bakingSetScene, IRoute[] tabs,
@@ -25,7 +31,9 @@ namespace UExtension.Navigation.Route.Tab
             {
                 Tabs.Add(tab.Name, tab);
                 tab.Previous = this;
+                tab.IsSelfActive = false;
             }
+
             ActiveTab = activeTab;
         }
 
