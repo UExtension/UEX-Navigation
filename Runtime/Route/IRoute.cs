@@ -42,13 +42,13 @@ namespace UExtension.Navigation.Route
         public IRoute Next { get; set; }
 
         /// <summary>
-        /// Determines whether this route is active
+        /// Gets or sets the active state of this route.
         /// </summary>
         /// <returns><see langword="true"/> if this route is active; otherwise, <see langword="false"/>.</returns>
-        bool IsSelfActive { get; internal set; }
+        bool IsSelfActive { get; set; }
 
         /// <summary>
-        /// Determines whether this route is active in the stack
+        /// Gets the active state of this route across the stack.
         /// </summary>
         /// <returns><see langword="true"/> if this route is active in the stack; otherwise, <see langword="false"/>.</returns>
         bool IsActive { get; }

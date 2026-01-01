@@ -16,8 +16,8 @@ namespace UExtension.Navigation
 
         public static bool Logging { get; set; } = true;
 
-        public static event Action<IRoute> OnRouteLoadStart = delegate { };
-        public static event Action<IRoute> OnRouteLoadEnd = delegate { };
+        public static event Action<IRoute> OnRouteLoadStart = delegate {};
+        public static event Action<IRoute> OnRouteLoadEnd = delegate {};
 
         /// <inheritdoc cref="IRoute.Push"/>
         public static async UniTask Push(IRouteFactory routeFactory)
@@ -158,7 +158,8 @@ namespace UExtension.Navigation
         /// <param name="route">The route replacing the root.</param>
         public static async UniTask Root(IRoute route)
         {
-            _route = route;
+            route.Previous = null;
+            _route = route.GetTip();
 
             if (Logging)
             {
