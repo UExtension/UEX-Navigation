@@ -72,6 +72,7 @@ namespace UExtension.Navigation.Route.Tab
         {
             if (HasNext() && Next.Equals(route))
             {
+                // Tab route and Next can't be separated. If Next is asked to pop, pop the Tab route.
                 return Pop();
             }
 
