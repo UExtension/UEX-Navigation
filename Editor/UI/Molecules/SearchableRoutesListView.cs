@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UExtension.Bootstrap.UI;
 using UExtension.Navigation.RouteFactory;
 using UnityEditor;
 using UnityEngine.UIElements;
 
-namespace UI
+namespace UExtension.Navigation.Editor.UI.Molecules
 {
     [UxmlElement]
-    public partial class SearchableRoutesListView : VisualElement
+    public partial class SearchableRoutesListView : VisualElement, IUExtensionTabFactory
     {
         private readonly RoutesListView listView;
         private readonly List<AbstractRouteFactory> routeFactories = new();
@@ -77,6 +78,16 @@ namespace UI
             }
 
             return assets;
+        }
+
+        public int Order => 1;
+
+        public Tab Create()
+        {
+            var tab = new Tab("Routes");
+            tab.AddToClassList("navigation-tab");
+            tab.Add(new SearchableRoutesListView());
+            return tab;
         }
     }
 }

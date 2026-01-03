@@ -1,20 +1,21 @@
 {
-	"name": "com.uextension.navigation.Editor",
-	"rootNamespace": "UExtension.Navigation.Editor",
-	"references": [
-		"com.uextension.navigation",
-		"com.uextension.sceneloader",
-		"UniTask"
-	],
-	"includePlatforms": [
-		"Editor"
-	],
-	"excludePlatforms": [],
-	"allowUnsafeCode": false,
-	"overrideReferences": false,
-	"precompiledReferences": [],
-	"autoReferenced": true,
-	"defineConstraints": [],
-	"versionDefines": [],
-	"noEngineReferences": false
+  "name": "com.uextension.navigation.Editor",
+  "rootNamespace": "UExtension.Navigation.Editor",
+  "references": [
+    "com.uextension.bootstrap.Editor",
+    "com.uextension.navigation",
+    "UniTask",
+    "com.uextension.sceneloader"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
 }

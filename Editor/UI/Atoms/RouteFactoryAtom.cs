@@ -1,20 +1,19 @@
 ﻿using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
-using UExtension.Navigation;
 using UExtension.Navigation.RouteFactory;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace UI.Atoms
+namespace UExtension.Navigation.Editor.UI.Atoms
 {
-    public class RouteFactoryUI : VisualElement
+    public class RouteFactoryAtom : VisualElement
     {
         private AbstractRouteFactory _routeFactory;
 
         public Label NameLabel { get; }
 
-        public RouteFactoryUI()
+        public RouteFactoryAtom()
         {
             AddToClassList("route-factory");
             NameLabel = new Label();

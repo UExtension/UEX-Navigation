@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
-using UExtension.Navigation;
+using UExtension.Navigation.Editor.UI.Atoms;
 using UExtension.Navigation.Route;
 using UExtension.Navigation.Route.Stack;
 using UExtension.Navigation.Route.Tab;
-using UI.Atoms;
 using UnityEngine.UIElements;
 
-namespace UI
+namespace UExtension.Navigation.Editor.UI.Molecules
 {
     [UxmlElement]
     public partial class NavigationHistory : VisualElement
@@ -43,9 +42,9 @@ namespace UI
             }
         }
 
-        private RouteUI CreateRoute(IRoute route)
+        private RouteAtom CreateRoute(IRoute route)
         {
-            var routeUI = new RouteUI(route);
+            var routeUI = new RouteAtom(route);
 
             GetRow(route.Depth).Add(routeUI);
 
@@ -82,21 +81,21 @@ namespace UI
             return row;
         }
 
-        private void CreateStackRouteUI(StackRoute route, RouteUI routeUI)
+        private void CreateStackRouteUI(StackRoute route, RouteAtom routeAtom)
         {
             if (!route.HasNext()) return;
 
             var nextRouteUI = CreateRoute(route.Next);
-            var arrow = new ArrowUI(routeUI, nextRouteUI, route.IsActive);
+            var arrow = new ArrowAtom(routeAtom, nextRouteUI, route.IsActive);
             _arrowContainer.Add(arrow);
         }
 
-        private void CreateTabRouteUI(TabRoute route, RouteUI routeUI)
+        private void CreateTabRouteUI(TabRoute route, RouteAtom routeAtom)
         {
             route.GetTabs().ForEach(tab =>
             {
                 var nextRouteUI = CreateRoute(tab);
-                var arrow = new ArrowUI(routeUI, nextRouteUI, tab.IsActive);
+                var arrow = new ArrowAtom(routeAtom, nextRouteUI, tab.IsActive);
                 _arrowContainer.Add(arrow);
             });
         }

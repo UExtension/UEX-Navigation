@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using UExtension.Navigation.Editor.UI.Atoms;
 using UExtension.Navigation.RouteFactory;
-using UI.Atoms;
 using UnityEditor;
 using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
 
-namespace UI
+namespace UExtension.Navigation.Editor.UI.Molecules
 {
     [UxmlElement]
     public partial class RoutesListView : ListView
@@ -18,13 +18,13 @@ namespace UI
             {
                 var routeContainer = new VisualElement();
                 routeContainer.AddToClassList("routes-list-view__item");
-                var route = new RouteFactoryUI();
+                var route = new RouteFactoryAtom();
                 routeContainer.Add(route);
                 return routeContainer;
             };
             bindItem = (element, i) =>
             {
-                ((RouteFactoryUI)element[0]).Initialize(((List<AbstractRouteFactory>)itemsSource)[i]);
+                ((RouteFactoryAtom)element[0]).Initialize(((List<AbstractRouteFactory>)itemsSource)[i]);
             };
             showAlternatingRowBackgrounds = AlternatingRowBackground.ContentOnly;
             virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;

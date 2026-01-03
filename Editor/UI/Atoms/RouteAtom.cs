@@ -1,48 +1,62 @@
 ﻿using Cysharp.Threading.Tasks;
-using UExtension.Navigation;
 using UExtension.Navigation.Route;
 using UExtension.Navigation.Route.Tab;
 using UnityEngine.UIElements;
 
-namespace UI.Atoms
+namespace UExtension.Navigation.Editor.UI.Atoms
 {
-    public class RouteUI : VisualElement
+    public class RouteAtom : VisualElement
     {
+        private IRoute _route;
+
+        public IRoute Route
+        {
+            get => _route;
+            set
+            {
+                _route = value;
+
+                if (Route.IsActive && !Route.HasNext())
+                {
+                    AddToClassList("Route--selected");
+                }
+
+                if (Route.IsActive)
+                {
+                    AddToClassList("Route--active");
+                }
+
+                if (!Route.HasNext())
+                {
+                    AddToClassList("Route--tip");
+                }
+
+                Label.text = Route.Name;
+            }
+        }
+
         public VisualElement Background { get; }
         public Label Label { get; }
-        public IRoute Route { get; }
 
-        public RouteUI(IRoute route)
+        public RouteAtom()
         {
-            Route = route;
-
-            AddToClassList("route");
-
-            if (route.IsActive && !route.HasNext())
-            {
-                AddToClassList("route--selected");
-            }
-
-            if (route.IsActive)
-            {
-                AddToClassList("route--active");
-            }
-
-            if (!route.HasNext())
-            {
-                AddToClassList("route--tip");
-            }
+            AddToClassList("Route");
 
             Background = new VisualElement();
             Background.AddToClassList("route__background");
 
-            Label = new Label(route.Name);
+            Label = new Label();
             Label.AddToClassList("route__label");
 
             Add(Background);
             Add(Label);
 
             SetupManipulator();
+        }
+
+        public RouteAtom(IRoute route) : this()
+        {
+            Route = route;
         }
 
         private void SetupManipulator()

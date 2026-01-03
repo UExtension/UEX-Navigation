@@ -1,22 +1,22 @@
 ﻿using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace UI.Atoms
+namespace UExtension.Navigation.Editor.UI.Atoms
 {
-    public class ArrowUI : VisualElement
+    public class ArrowAtom : VisualElement
     {
         private readonly VisualElement _from;
         private readonly VisualElement _to;
         private readonly bool _isActive;
 
-        public ArrowUI(VisualElement from, VisualElement to, bool isActive = true)
+        public ArrowAtom(VisualElement from, VisualElement to, bool isActive = true)
         {
             AddToClassList("arrow");
             _from = from;
             _to = to;
             _isActive = isActive;
             generateVisualContent += OnGenerateVisualContent;
-            
+
             if (_isActive)
             {
                 AddToClassList("arrow--active");
@@ -29,7 +29,7 @@ namespace UI.Atoms
 
             painter2D.lineWidth = 3.0f;
             painter2D.strokeColor = mgc.visualElement.resolvedStyle.color;
-            painter2D.dashPattern = _isActive ? new float[] { } : new float[] { 5, 5 };
+            painter2D.dashPattern = _isActive ? new float[] {} : new float[] { 5, 5 };
             painter2D.lineJoin = LineJoin.Round;
             painter2D.lineCap = LineCap.Round;
 
@@ -45,7 +45,7 @@ namespace UI.Atoms
             painter2D.LineTo(toTop);
             painter2D.Stroke();
 
-            painter2D.dashPattern = new float[] { };
+            painter2D.dashPattern = new float[] {};
             var direction = (toTop - fromBottom).normalized;
             var perpendicular = new Vector2(-direction.y, direction.x);
 
