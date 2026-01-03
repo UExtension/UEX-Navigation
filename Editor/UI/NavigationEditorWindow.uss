@@ -3,8 +3,13 @@
     flex-direction: row;
 }
 
-.navigation-history-column-view .searchable-routes-list-view {
+.searchable-routes-list-view {
+    flex-grow: 1;
     min-width: 300px;
+}
+
+.searchable-routes-list-view--side {
+    max-width: 300px;
 }
 
 .navigation-history-column-view__scroll-view {
