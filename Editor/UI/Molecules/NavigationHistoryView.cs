@@ -8,12 +8,12 @@ using UnityEngine.UIElements;
 namespace UExtension.Navigation.Editor.UI.Molecules
 {
     [UxmlElement]
-    public partial class NavigationHistory : VisualElement
+    public partial class NavigationHistoryView : VisualElement
     {
         private readonly List<VisualElement> _rows = new();
         private readonly VisualElement _arrowContainer = new();
 
-        public NavigationHistory()
+        public NavigationHistoryView()
         {
             AddToClassList("navigation-history");
 

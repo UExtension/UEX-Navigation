@@ -12,7 +12,7 @@ namespace UExtension.Navigation.Editor.UI
             AddToClassList("navigation-history-column-view");
 
             var routesListView = new SearchableRoutesListView();
-            var navigationHistory = new NavigationHistory();
+            var navigationHistory = new NavigationHistoryView();
 
             var scrollView = new ScrollView();
             scrollView.AddToClassList("navigation-history-column-view__scroll-view");
