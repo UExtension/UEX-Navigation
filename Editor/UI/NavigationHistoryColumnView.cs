@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 namespace UExtension.Navigation.Editor.UI
 {
     [UxmlElement]
-    public partial class NavigationHistoryColumnView : VisualElement, IUExtensionTabFactory
+    public partial class NavigationHistoryColumnView : VisualElement
     {
         public NavigationHistoryColumnView()
         {
@@ -20,16 +20,6 @@ namespace UExtension.Navigation.Editor.UI
 
             Add(routesListView);
             Add(scrollView);
-        }
-
-        public int Order => 2;
-
-        public Tab Create()
-        {
-            var tab = new Tab("History");
-            tab.AddToClassList("navigation-tab");
-            tab.Add(new NavigationHistoryColumnView());
-            return tab;
         }
     }
 }

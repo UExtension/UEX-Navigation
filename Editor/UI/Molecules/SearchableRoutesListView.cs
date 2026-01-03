@@ -9,12 +9,12 @@ using UnityEngine.UIElements;
 namespace UExtension.Navigation.Editor.UI.Molecules
 {
     [UxmlElement]
-    public partial class SearchableRoutesListView : VisualElement, IUExtensionTabFactory
+    public partial class SearchableRoutesListView : VisualElement
     {
         private readonly RoutesListView listView;
         private readonly List<AbstractRouteFactory> routeFactories = new();
         private readonly List<AbstractRouteFactory> filteredFactories = new();
-
+        
         public SearchableRoutesListView()
         {
             AddToClassList("searchable-routes-list-view");
@@ -78,16 +78,6 @@ namespace UExtension.Navigation.Editor.UI.Molecules
             }
 
             return assets;
-        }
-
-        public int Order => 1;
-
-        public Tab Create()
-        {
-            var tab = new Tab("Routes");
-            tab.AddToClassList("navigation-tab");
-            tab.Add(new SearchableRoutesListView());
-            return tab;
         }
     }
 }

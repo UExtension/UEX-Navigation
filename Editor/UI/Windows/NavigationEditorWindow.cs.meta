@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 46359a44bb3649cab75ae7e3b18082c4
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - m_ViewDataDictionary: {instanceID: 0}
+  - <VisualTreeAsset>k__BackingField: {fileID: 9197481963319205126, guid: 38ad12d9c43c90145921771c4aabf595, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
