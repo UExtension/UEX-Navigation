@@ -3,9 +3,9 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace UExtension.Navigation.Editor.UI
+namespace UExtension.Navigation.Editor.UI.Windows
 {
-    public class NavigationEditorWindow : EditorWindow, IUExtensionTabFactory
+    public class NavigationEditorWindow : EditorWindow, IUExtensionEditorWindow
     {
         [field: SerializeField] public VisualTreeAsset VisualTreeAsset { get; private set; }
         public string Name => "Navigation";

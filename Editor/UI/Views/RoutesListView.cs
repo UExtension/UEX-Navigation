@@ -6,7 +6,7 @@ using UnityEditor;
 using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
 
-namespace UExtension.Navigation.Editor.UI.Molecules
+namespace UExtension.Navigation.Editor.UI.Views
 {
     [UxmlElement]
     public partial class RoutesListView : ListView
@@ -22,15 +22,11 @@ namespace UExtension.Navigation.Editor.UI.Molecules
                 routeContainer.Add(route);
                 return routeContainer;
             };
-            bindItem = (element, i) =>
-            {
-                ((RouteFactoryAtom)element[0]).Initialize(((List<AbstractRouteFactory>)itemsSource)[i]);
-            };
+            bindItem = (element, i) => { ((RouteFactoryAtom)element[0]).Initialize(((List<AbstractRouteFactory>)itemsSource)[i]); };
             showAlternatingRowBackgrounds = AlternatingRowBackground.ContentOnly;
             virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
             selectionChanged += HandleRouteFactorySelected;
         }
-
 
         private void HandleRouteFactorySelected(IEnumerable<object> selection)
         {

@@ -1,8 +1,6 @@
-﻿using UExtension.Bootstrap.UI;
-using UExtension.Navigation.Editor.UI.Molecules;
-using UnityEngine.UIElements;
+﻿using UnityEngine.UIElements;
 
-namespace UExtension.Navigation.Editor.UI
+namespace UExtension.Navigation.Editor.UI.Views
 {
     [UxmlElement]
     public partial class NavigationHistoryColumnView : VisualElement

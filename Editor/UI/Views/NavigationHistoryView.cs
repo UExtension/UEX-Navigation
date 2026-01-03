@@ -5,7 +5,7 @@ using UExtension.Navigation.Route.Stack;
 using UExtension.Navigation.Route.Tab;
 using UnityEngine.UIElements;
 
-namespace UExtension.Navigation.Editor.UI.Molecules
+namespace UExtension.Navigation.Editor.UI.Views
 {
     [UxmlElement]
     public partial class NavigationHistoryView : VisualElement

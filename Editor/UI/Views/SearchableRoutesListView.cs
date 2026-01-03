@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UExtension.Bootstrap.UI;
 using UExtension.Navigation.RouteFactory;
 using UnityEditor;
 using UnityEngine.UIElements;
 
-namespace UExtension.Navigation.Editor.UI.Molecules
+namespace UExtension.Navigation.Editor.UI.Views
 {
     [UxmlElement]
     public partial class SearchableRoutesListView : VisualElement

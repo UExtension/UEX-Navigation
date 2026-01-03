@@ -3,5 +3,5 @@
          editor-extension-mode="False">
     <Style
         src="/Packages/com.uextension.navigation/Editor/UI/NavigationEditorWindow.uss" />
-        <UExtension.Navigation.Editor.UI.NavigationHistoryColumnView />
+        <UExtension.Navigation.Editor.UI.Views.NavigationHistoryColumnView />
 </ui:UXML>
