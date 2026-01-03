@@ -18,17 +18,17 @@ namespace UExtension.Navigation.Editor.UI.Atoms
 
                 if (Route.IsActive && !Route.HasNext())
                 {
-                    AddToClassList("Route--selected");
+                    AddToClassList("route--selected");
                 }
 
                 if (Route.IsActive)
                 {
-                    AddToClassList("Route--active");
+                    AddToClassList("route--active");
                 }
 
                 if (!Route.HasNext())
                 {
-                    AddToClassList("Route--tip");
+                    AddToClassList("route--tip");
                 }
 
                 Label.text = Route.Name;
@@ -40,7 +40,7 @@ namespace UExtension.Navigation.Editor.UI.Atoms
 
         public RouteAtom()
         {
-            AddToClassList("Route");
+            AddToClassList("route");
 
             Background = new VisualElement();
             Background.AddToClassList("route__background");
