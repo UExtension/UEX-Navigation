@@ -11,9 +11,9 @@ namespace UExtension.Navigation.Editor
         public static void ToggleLogging()
         {
             var asset = AssetDatabase
-                .FindAssets($"t:{nameof(NavigationActions)}")
+                .FindAssets($"t:{nameof(ScriptableNavigationService)}")
                 .Select(AssetDatabase.GUIDToAssetPath)
-                .Select(AssetDatabase.LoadAssetAtPath<NavigationActions>)
+                .Select(AssetDatabase.LoadAssetAtPath<ScriptableNavigationService>)
                 .Single();
 
             asset.SetLogging(!asset.Logging);

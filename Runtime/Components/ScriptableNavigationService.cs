@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace UExtension.Navigation.Components
 {
-    public class NavigationActions : ScriptableObject
+    public class ScriptableNavigationService : ScriptableObject
     {
         [field: SerializeField, HideInInspector]
         public bool Logging { get; private set; } = true;
