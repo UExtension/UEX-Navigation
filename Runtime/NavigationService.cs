@@ -1,5 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
+using UExtension.Navigation.Exceptions;
 using UExtension.Navigation.Route;
 using UExtension.Navigation.Route.Tab;
 using UExtension.Navigation.RouteFactory;
@@ -28,6 +29,11 @@ namespace UExtension.Navigation
         /// <inheritdoc cref="IRoute.Push"/>
         public static async UniTask<IRoute> Push(IRoute route)
         {
+            if (!IsRouteReady())
+            {
+                return await Root(route);
+            }
+            
             if (Logging)
             {
                 Debug.Log($"{LoggingPrefix} Push: {route.Name}");
@@ -39,17 +45,17 @@ namespace UExtension.Navigation
         /// <inheritdoc cref="IRoute.Pop()"/>
         public static async UniTask<IRoute> Pop()
         {
-            if (Logging)
-            {
-                Debug.Log($"{LoggingPrefix} Pop: {_route.Name}");
-            }
-
-            return await LoadRouteAsync(_route.Pop());
+            return await Pop(_route);
         }
 
         /// <inheritdoc cref="IRoute.Pop(IRoute)"/>
         public static async UniTask<IRoute> Pop(IRoute route)
         {
+            if (!IsRouteReady())
+            {
+                throw new RootRouteNotYetInstantiated();
+            }
+            
             if (Logging)
             {
                 Debug.Log($"{LoggingPrefix} Pop: {route.Name}");
@@ -69,6 +75,11 @@ namespace UExtension.Navigation
         /// </summary>
         public static async UniTask<IRoute> Navigate(IRoute route)
         {
+            if (_route == null)
+            {
+                return await Root(route);
+            }
+            
             if (Logging)
             {
                 Debug.Log($"{LoggingPrefix} Navigate: {route.Name}");
