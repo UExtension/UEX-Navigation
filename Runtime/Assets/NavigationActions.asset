@@ -1,4 +1,4 @@
-﻿%YAML 1.1
+%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!114 &11400000
 MonoBehaviour:
@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7cd1ea5e24d4982a31b5728c985c39a, type: 3}
   m_Name: NavigationActions
   m_EditorClassIdentifier: 
+  <Logging>k__BackingField: 1

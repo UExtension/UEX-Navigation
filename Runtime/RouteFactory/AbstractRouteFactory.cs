@@ -8,22 +8,19 @@ namespace UExtension.Navigation.RouteFactory
     public abstract class AbstractRouteFactory : ScriptableObject, IRouteFactory
     {
         [field: Header("Route Configuration"), SerializeField]
-        public string Name { get; private set; }
+        public string Name { get; set; }
 
         [field: SerializeField]
-        public List<SceneContainer> Scenes { get; private set; }
+        public List<SceneContainer> Scenes { get; set; }
 
         [field: SerializeField]
-        public SceneContainer ActiveScene { get; private set; }
+        public SceneContainer ActiveScene { get; set; }
 
         [field: SerializeField]
-        public SceneContainer BakingSetActiveScene { get; private set; }
+        public SceneContainer BakingSetActiveScene { get; set; }
 
         public abstract IRoute Create();
 
-        public bool Is(IRoute route)
-        {
-            return Name == route.Name;
-        }
+        public bool Is(IRoute route) => Name == route.Name;
     }
 }
