@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using UExtension.Navigation.Exceptions;
 using UExtension.Navigation.Route;
@@ -17,82 +18,54 @@ namespace UExtension.Navigation
 
         public static bool Logging { get; set; } = true;
 
+        private static CancellationTokenSource cts;
+
         public static event Action<IRoute> OnRouteLoadStart = delegate {};
         public static event Action<IRoute> OnRouteLoadEnd = delegate {};
 
         /// <inheritdoc cref="IRoute.Push"/>
-        public static async UniTask<IRoute> Push(IRouteFactory routeFactory)
-        {
-            return await Push(routeFactory.Create());
-        }
+        public static async UniTask<IRoute> Push(IRouteFactory routeFactory) => await Push(routeFactory.Create());
 
         /// <inheritdoc cref="IRoute.Push"/>
         public static async UniTask<IRoute> Push(IRoute route)
         {
-            if (!IsRouteReady())
-            {
-                return await Root(route);
-            }
-            
-            if (Logging)
-            {
-                Debug.Log($"{LoggingPrefix} Push: {route.Name}");
-            }
+            if (!IsRouteReady()) return await Root(route);
+
+            if (Logging) Debug.Log($"{LoggingPrefix} Push: {route.Name}");
 
             return await LoadRouteAsync(_route.Push(route));
         }
 
         /// <inheritdoc cref="IRoute.Pop()"/>
-        public static async UniTask<IRoute> Pop()
-        {
-            return await Pop(_route);
-        }
+        public static async UniTask<IRoute> Pop() => await Pop(_route);
 
         /// <inheritdoc cref="IRoute.Pop(IRoute)"/>
         public static async UniTask<IRoute> Pop(IRoute route)
         {
-            if (!IsRouteReady())
-            {
-                throw new RootRouteNotYetInstantiated();
-            }
-            
-            if (Logging)
-            {
-                Debug.Log($"{LoggingPrefix} Pop: {route.Name}");
-            }
+            if (!IsRouteReady()) throw new RootRouteNotYetInstantiated();
+
+            if (Logging) Debug.Log($"{LoggingPrefix} Pop: {route.Name}");
 
             return await LoadRouteAsync(_route.Pop(route));
         }
 
         /// <inheritdoc cref="IRoute.Navigate"/>
-        public static async UniTask<IRoute> Navigate(IRouteFactory routeFactory)
-        {
-            return await Navigate(routeFactory.Create());
-        }
+        public static async UniTask<IRoute> Navigate(IRouteFactory routeFactory) => await Navigate(routeFactory.Create());
 
         /// <summary>
         /// <inheritdoc cref="IRoute.Navigate"/>
         /// </summary>
         public static async UniTask<IRoute> Navigate(IRoute route)
         {
-            if (_route == null)
-            {
-                return await Root(route);
-            }
-            
-            if (Logging)
-            {
-                Debug.Log($"{LoggingPrefix} Navigate: {route.Name}");
-            }
+            if (_route == null) return await Root(route);
+
+            if (Logging) Debug.Log($"{LoggingPrefix} Navigate: {route.Name}");
 
             return await LoadRouteAsync(_route.Navigate(route));
         }
 
         /// <inheritdoc cref="SetTab(UExtension.Navigation.Route.Tab.TabRoute,UExtension.Navigation.Route.IRoute)"/>
-        public static async UniTask<IRoute> SetTab(TabRouteFactory tabRouteFactory, IRouteFactory tabFactory)
-        {
-            return await SetTab(tabRouteFactory.CreateTyped(), tabFactory.Create());
-        }
+        public static async UniTask<IRoute> SetTab(TabRouteFactory tabRouteFactory, IRouteFactory tabFactory) => await SetTab(tabRouteFactory.CreateTyped(), tabFactory.Create());
 
         /// <summary>
         /// Updates the active tab of the given <see cref="TabRoute"/> and navigates to it. If the given <see cref="TabRoute"/> isn't found in history, it will be pushed on top.
@@ -101,43 +74,25 @@ namespace UExtension.Navigation
         /// <param name="tab">The tab to set active.</param>
         public static async UniTask<IRoute> SetTab(TabRoute tabRoute, IRoute tab)
         {
-            if (Logging)
-            {
-                Debug.Log($"{LoggingPrefix} Set tab {tab.Name} to {tabRoute.Name}");
-            }
+            if (Logging) Debug.Log($"{LoggingPrefix} Set tab {tab.Name} to {tabRoute.Name}");
 
             return await LoadRouteAsync(tabRoute.SetActiveTab(tab));
         }
 
         /// <inheritdoc cref="IRoute.GetRoot"/>
-        public static IRoute GetRoot()
-        {
-            return _route.GetRoot();
-        }
+        public static IRoute GetRoot() => _route.GetRoot();
 
         /// <inheritdoc cref="IRoute.GetTip"/>
-        public static IRoute GetTip()
-        {
-            return _route.GetTip();
-        }
+        public static IRoute GetTip() => _route.GetTip();
 
         /// <inheritdoc cref="IRoute.Search"/>
-        public static IRoute Search(IRouteFactory routeFactory)
-        {
-            return Search(routeFactory.Create());
-        }
+        public static IRoute Search(IRouteFactory routeFactory) => Search(routeFactory.Create());
 
         /// <inheritdoc cref="IRoute.Search"/>
-        public static IRoute Search(IRoute route)
-        {
-            return _route.Search(route);
-        }
+        public static IRoute Search(IRoute route) => _route.Search(route);
 
         /// <inheritdoc cref="Replace(IRouteFactory)"/>
-        public static async UniTask<IRoute> Replace(IRouteFactory routeFactory)
-        {
-            return await Replace(routeFactory.Create());
-        }
+        public static async UniTask<IRoute> Replace(IRouteFactory routeFactory) => await Replace(routeFactory.Create());
 
         /// <summary>
         /// Replaces the tip of the current route stack by the given route.
@@ -145,19 +100,13 @@ namespace UExtension.Navigation
         /// <param name="route">The route replacing the tip.</param>
         public static async UniTask<IRoute> Replace(IRoute route)
         {
-            if (Logging)
-            {
-                Debug.Log($"{LoggingPrefix} Replace: {route.Name}");
-            }
+            if (Logging) Debug.Log($"{LoggingPrefix} Replace: {route.Name}");
 
             return await LoadRouteAsync(_route.Pop().Push(route));
         }
 
         /// <inheritdoc cref="Root(IRouteFactory)"/>
-        public static async UniTask<IRoute> Root(IRouteFactory routeFactory)
-        {
-            return await Root(routeFactory.Create());
-        }
+        public static async UniTask<IRoute> Root(IRouteFactory routeFactory) => await Root(routeFactory.Create());
 
         /// <summary>
         /// Replaces the current root and its history by the given route.
@@ -165,10 +114,7 @@ namespace UExtension.Navigation
         /// <param name="route">The route replacing the root.</param>
         public static async UniTask<IRoute> Root(IRoute route)
         {
-            if (Logging)
-            {
-                Debug.Log($"{LoggingPrefix} Root: {route.Name}");
-            }
+            if (Logging) Debug.Log($"{LoggingPrefix} Root: {route.Name}");
 
             route.Previous = null;
             route.IsSelfActive = true;
@@ -181,18 +127,12 @@ namespace UExtension.Navigation
         /// </summary>
         public static async UniTask<IRoute> Reload()
         {
-            if (Logging)
-            {
-                Debug.Log($"{LoggingPrefix} Reload: {_route.Name}");
-            }
+            if (Logging) Debug.Log($"{LoggingPrefix} Reload: {_route.Name}");
 
             return await LoadRouteAsync(_route);
         }
 
-        public static bool IsRouteReady()
-        {
-            return _route != null;
-        }
+        public static bool IsRouteReady() => _route != null;
 
         /// <summary>
         /// Loads the specified route's scene group asynchronously.
@@ -201,28 +141,30 @@ namespace UExtension.Navigation
         /// <returns>A task that represents the asynchronous operation of loading the scene group.</returns>
         public static async UniTask<IRoute> LoadRouteAsync(IRoute route)
         {
+            CancelRouting();
+            cts = new CancellationTokenSource();
+            var token = cts.Token;
+
             _route = route.GetTip();
 
-            if (Logging)
-            {
-                Debug.Log($"{LoggingPrefix} {_route.GetRoot().ToString()}");
-            }
+            if (Logging) Debug.Log($"{LoggingPrefix} {_route.GetRoot().ToString()}");
 
             OnRouteLoadStart.Invoke(route);
-            await SceneLoader.SceneLoader.SetActiveSceneContainers(route.Scenes);
+            await SceneLoader.SceneLoader.SetActiveSceneContainers(route.Scenes, cancellationToken: token);
 
-            if (route.ActiveScene != null)
-            {
-                SceneLoader.SceneLoader.SetActiveScene(route.ActiveScene);
-            }
+            if (route.ActiveScene != null) SceneLoader.SceneLoader.SetActiveScene(route.ActiveScene);
 
-            if (route.BakingSetActiveScene != null)
-            {
-                SceneLoader.SceneLoader.SetBakingSet(route.BakingSetActiveScene);
-            }
+            if (route.BakingSetActiveScene != null) SceneLoader.SceneLoader.SetBakingSet(route.BakingSetActiveScene);
 
             OnRouteLoadEnd.Invoke(route);
             return route;
+        }
+
+        public static void CancelRouting()
+        {
+            cts?.Cancel();
+            cts?.Dispose();
+            cts = null;
         }
     }
 }
