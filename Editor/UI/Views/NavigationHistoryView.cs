@@ -3,9 +3,10 @@ using UExtension.Navigation.Editor.UI.Atoms;
 using UExtension.Navigation.Route;
 using UExtension.Navigation.Route.Stack;
 using UExtension.Navigation.Route.Tab;
+using UExtension.Navigation.Router;
 using UnityEngine.UIElements;
 
-namespace UExtension.Navigation.Editor.UI.Views
+namespace UExtension.Navigation.Editor.Editor.UI.Views
 {
     [UxmlElement]
     public partial class NavigationHistoryView : VisualElement
@@ -22,10 +23,7 @@ namespace UExtension.Navigation.Editor.UI.Views
             GenerateHistory();
         }
 
-        private void HandleRouteChanged(IRoute obj)
-        {
-            GenerateHistory();
-        }
+        private void HandleRouteChanged(ISet<IRouter> routers) => GenerateHistory();
 
         public void GenerateHistory()
         {
@@ -36,10 +34,7 @@ namespace UExtension.Navigation.Editor.UI.Views
             _arrowContainer.AddToClassList("navigation-history__arrows");
             Add(_arrowContainer);
 
-            if (NavigationService.IsRouteReady())
-            {
-                CreateRoute(NavigationService.GetRoot());
-            }
+            if (NavigationService.IsRouteReady()) CreateRoute(NavigationService.GetRoot());
         }
 
         private RouteAtom CreateRoute(IRoute route)
@@ -66,10 +61,7 @@ namespace UExtension.Navigation.Editor.UI.Views
         private VisualElement GetRow(int depth)
         {
             VisualElement row;
-            if (_rows.Count > depth)
-            {
-                row = _rows[depth];
-            }
+            if (_rows.Count > depth) { row = _rows[depth]; }
             else
             {
                 row = new VisualElement();
@@ -90,14 +82,13 @@ namespace UExtension.Navigation.Editor.UI.Views
             _arrowContainer.Add(arrow);
         }
 
-        private void CreateTabRouteUI(TabRoute route, RouteAtom routeAtom)
-        {
-            route.GetTabs().ForEach(tab =>
-            {
-                var nextRouteUI = CreateRoute(tab);
-                var arrow = new ArrowAtom(routeAtom, nextRouteUI, tab.IsActive);
-                _arrowContainer.Add(arrow);
-            });
-        }
+        private void CreateTabRouteUI(TabRoute route, RouteAtom routeAtom) =>
+            route.GetTabs()
+                 .ForEach(tab =>
+                 {
+                     var nextRouteUI = CreateRoute(tab);
+                     var arrow = new ArrowAtom(routeAtom, nextRouteUI, tab.IsActive);
+                     _arrowContainer.Add(arrow);
+                 });
     }
 }

@@ -23,13 +23,9 @@ namespace UExtension.Navigation.Editor.UI.Atoms
             buttonContainer.AddToClassList("route-factory__buttons");
 
             if (Application.isPlaying)
-            {
                 CreatePlayModeButtons().ForEach(buttonContainer.Add);
-            }
             else
-            {
                 CreateEditorModeButtons().ForEach(buttonContainer.Add);
-            }
 
             Add(buttonContainer);
         }
@@ -82,28 +78,15 @@ namespace UExtension.Navigation.Editor.UI.Atoms
 
             EditorSceneManager.OpenScene(_routeFactory.ActiveScene.Path);
             foreach (var scene in _routeFactory.Scenes)
-            {
                 if (_routeFactory.ActiveScene.BuildIndex != scene.BuildIndex)
-                {
                     EditorSceneManager.OpenScene(scene.Path, OpenSceneMode.Additive);
-                }
-            }
         }
 
-        private void HandlePushRoute(ClickEvent evt)
-        {
-            NavigationService.Push(_routeFactory).Forget();
-        }
+        private void HandlePushRoute(ClickEvent evt) => NavigationService.combinedRouter.Push(_routeFactory).Load().Forget();
 
-        private void HandleReplaceRoute(ClickEvent evt)
-        {
-            NavigationService.Replace(_routeFactory).Forget();
-        }
+        private void HandleReplaceRoute(ClickEvent evt) => NavigationService.combinedRouter.Replace(_routeFactory).Load().Forget();
 
-        private void HandleRootRoute(ClickEvent evt)
-        {
-            NavigationService.Root(_routeFactory).Forget();
-        }
+        private void HandleRootRoute(ClickEvent evt) => NavigationService.combinedRouter.Root(_routeFactory).Load().Forget();
 
         public void Initialize(AbstractRouteFactory routeFactory)
         {

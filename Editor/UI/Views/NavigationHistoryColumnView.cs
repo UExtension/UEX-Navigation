@@ -51,7 +51,7 @@ namespace UExtension.Navigation.Editor.UI.Views
         {
             var scrollView = new ScrollView();
             scrollView.AddToClassList("navigation-history-column-view__scroll-view");
-            scrollView.Add(new NavigationHistoryView());
+            scrollView.Add(new Editor.UI.Views.NavigationHistoryView());
             Add(scrollView);
         }
     }
