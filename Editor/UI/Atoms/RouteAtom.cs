@@ -16,20 +16,11 @@ namespace UExtension.Navigation.Editor.UI.Atoms
             {
                 _route = value;
 
-                if (Route.IsActive && !Route.HasNext())
-                {
-                    AddToClassList("route--selected");
-                }
+                if (Route.IsActive && !Route.HasNext()) AddToClassList("route--selected");
 
-                if (Route.IsActive)
-                {
-                    AddToClassList("route--active");
-                }
+                if (Route.IsActive) AddToClassList("route--active");
 
-                if (!Route.HasNext())
-                {
-                    AddToClassList("route--tip");
-                }
+                if (!Route.HasNext()) AddToClassList("route--tip");
 
                 Label.text = Route.Name;
             }
@@ -54,13 +45,9 @@ namespace UExtension.Navigation.Editor.UI.Atoms
             SetupManipulator();
         }
 
-        public RouteAtom(IRoute route) : this()
-        {
-            Route = route;
-        }
+        public RouteAtom(IRoute route) : this() { Route = route; }
 
-        private void SetupManipulator()
-        {
+        private void SetupManipulator() =>
             this.AddManipulator(new ContextualMenuManipulator(evt =>
             {
                 if (Route.IsActive)
@@ -69,34 +56,20 @@ namespace UExtension.Navigation.Editor.UI.Atoms
                     evt.menu.AppendAction("Navigate", HandleNavigate, DropdownMenuAction.AlwaysEnabled);
                 }
 
-                if (Route.Previous is TabRoute)
-                {
-                    evt.menu.AppendAction("Set active tab", HandleSetTab, DropdownMenuAction.AlwaysEnabled);
-                }
+                if (Route.Previous is TabRoute) evt.menu.AppendAction("Set active tab", HandleSetTab, DropdownMenuAction.AlwaysEnabled);
 
                 evt.menu.AppendAction("Root", HandleRoot, DropdownMenuAction.AlwaysEnabled);
             }));
-        }
 
-        private void HandlePop(DropdownMenuAction _)
-        {
-            NavigationService.Pop(Route).Forget();
-        }
+        private void HandlePop(DropdownMenuAction _) => NavigationService.combinedRouter.Pop(Route).Load().Forget();
 
-        private void HandleNavigate(DropdownMenuAction _)
-        {
-            NavigationService.Navigate(Route).Forget();
-        }
+        private void HandleNavigate(DropdownMenuAction _) => NavigationService.combinedRouter.Navigate(Route).Load().Forget();
 
         private void HandleSetTab(DropdownMenuAction _)
         {
-            if (Route.Previous is TabRoute tabRoute)
-                NavigationService.SetTab(tabRoute, Route).Forget();
+            if (Route.Previous is TabRoute tabRoute) NavigationService.combinedRouter.SetTab(tabRoute, Route).Load().Forget();
         }
 
-        private void HandleRoot(DropdownMenuAction _)
-        {
-            NavigationService.Root(Route).Forget();
-        }
+        private void HandleRoot(DropdownMenuAction _) => NavigationService.combinedRouter.Root(Route).Load().Forget();
     }
 }

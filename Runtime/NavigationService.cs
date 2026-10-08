@@ -1,170 +1,130 @@
 using System;
-using System.Threading;
-using Cysharp.Threading.Tasks;
-using UExtension.Navigation.Exceptions;
+using System.Collections.Generic;
 using UExtension.Navigation.Route;
 using UExtension.Navigation.Route.Tab;
 using UExtension.Navigation.RouteFactory;
 using UExtension.Navigation.RouteFactory.Tab;
-using UnityEngine;
+using UExtension.Navigation.Router;
+using UExtension.Navigation.Router.Combined;
+using UExtension.Navigation.RouterFactory;
+using UniTask = Cysharp.Threading.Tasks.UniTask;
 
 namespace UExtension.Navigation
 {
     public static class NavigationService
+
     {
-        private const string LoggingPrefix = "<color=#DE00C8>[Navigation]</color>";
+        public static readonly CombinedRouter combinedRouter = new();
 
-        private static IRoute _route;
+        private static bool _logging = true;
 
-        public static bool Logging { get; set; } = true;
-
-        private static CancellationTokenSource cts;
-
-        public static event Action<IRoute> OnRouteLoadStart = delegate {};
-        public static event Action<IRoute> OnRouteLoadEnd = delegate {};
-
-        /// <inheritdoc cref="IRoute.Push"/>
-        public static async UniTask<IRoute> Push(IRouteFactory routeFactory) => await Push(routeFactory.Create());
-
-        /// <inheritdoc cref="IRoute.Push"/>
-        public static async UniTask<IRoute> Push(IRoute route)
+        public static bool logging
         {
-            if (!IsRouteReady()) return await Root(route);
+            get => _logging;
+            set
+            {
+                _logging = value;
+                foreach (var router in combinedRouter.routers) router.logging = value;
+            }
+        }
 
-            if (Logging) Debug.Log($"{LoggingPrefix} Push: {route.Name}");
+        public static event Action<ISet<IRouter>> OnRouteLoadStart
+        {
+            add => combinedRouter.OnRouteLoadStart += value;
+            remove => combinedRouter.OnRouteLoadStart -= value;
+        }
 
-            return await LoadRouteAsync(_route.Push(route));
+        public static event Action<ISet<IRouter>> OnRouteLoadEnd
+        {
+            add => combinedRouter.OnRouteLoadEnd += value;
+            remove => combinedRouter.OnRouteLoadEnd -= value;
+        }
+
+        /// <inheritdoc cref="IRoute.Push"/>
+        public static UniTask Push(params RouterRouteFactory[] routeFactories) => Push(routeFactories.ToRouterRoutes());
+
+        /// <inheritdoc cref="IRoute.Push"/>
+        public static UniTask Push(params RouterRoute[] routes)
+        {
+            foreach (var tuple in routes) combinedRouter.SetCurrentRouter(tuple.router).Push(tuple.route);
+            return combinedRouter.Load();
         }
 
         /// <inheritdoc cref="IRoute.Pop()"/>
-        public static async UniTask<IRoute> Pop() => await Pop(_route);
+        public static UniTask Pop() => Pop(combinedRouter.GetRouterRoutes());
 
         /// <inheritdoc cref="IRoute.Pop(IRoute)"/>
-        public static async UniTask<IRoute> Pop(IRoute route)
+        public static UniTask Pop(params RouterRoute[] routes)
         {
-            if (!IsRouteReady()) throw new RootRouteNotYetInstantiated();
-
-            if (Logging) Debug.Log($"{LoggingPrefix} Pop: {route.Name}");
-
-            return await LoadRouteAsync(_route.Pop(route));
+            foreach (var tuple in routes) combinedRouter.SetCurrentRouter(tuple.router).Pop(tuple.route);
+            return combinedRouter.Load();
         }
 
         /// <inheritdoc cref="IRoute.Navigate"/>
-        public static async UniTask<IRoute> Navigate(IRouteFactory routeFactory) => await Navigate(routeFactory.Create());
+        public static UniTask Navigate(params RouterRouteFactory[] routeFactories) => Navigate(routeFactories.ToRouterRoutes());
 
         /// <summary>
         /// <inheritdoc cref="IRoute.Navigate"/>
         /// </summary>
-        public static async UniTask<IRoute> Navigate(IRoute route)
+        public static UniTask Navigate(params RouterRoute[] routes)
         {
-            if (_route == null) return await Root(route);
-
-            if (Logging) Debug.Log($"{LoggingPrefix} Navigate: {route.Name}");
-
-            return await LoadRouteAsync(_route.Navigate(route));
+            foreach (var tuple in routes) combinedRouter.SetCurrentRouter(tuple.router).Navigate(tuple.route);
+            return combinedRouter.Load();
         }
 
         /// <inheritdoc cref="SetTab(UExtension.Navigation.Route.Tab.TabRoute,UExtension.Navigation.Route.IRoute)"/>
-        public static async UniTask<IRoute> SetTab(TabRouteFactory tabRouteFactory, IRouteFactory tabFactory) => await SetTab(tabRouteFactory.CreateTyped(), tabFactory.Create());
+        public static UniTask SetTab(TabRouteFactory tabRouteFactory, IRouteFactory tabFactory) => SetTab(tabRouteFactory.CreateTyped(), tabFactory.Create());
 
         /// <summary>
         /// Updates the active tab of the given <see cref="TabRoute"/> and navigates to it. If the given <see cref="TabRoute"/> isn't found in history, it will be pushed on top.
         /// </summary>
         /// <param name="tabRoute">The route to navigate to.</param>
         /// <param name="tab">The tab to set active.</param>
-        public static async UniTask<IRoute> SetTab(TabRoute tabRoute, IRoute tab)
-        {
-            if (Logging) Debug.Log($"{LoggingPrefix} Set tab {tab.Name} to {tabRoute.Name}");
-
-            return await LoadRouteAsync(tabRoute.SetActiveTab(tab));
-        }
+        public static UniTask SetTab(TabRoute tabRoute, IRoute tab) => combinedRouter.SetTab(tabRoute, tab).Load();
 
         /// <inheritdoc cref="IRoute.GetRoot"/>
-        public static IRoute GetRoot() => _route.GetRoot();
+        public static IRoute GetRoot() => combinedRouter.GetRoot();
 
         /// <inheritdoc cref="IRoute.GetTip"/>
-        public static IRoute GetTip() => _route.GetTip();
+        public static IRoute GetTip() => combinedRouter.GetTip();
 
         /// <inheritdoc cref="IRoute.Search"/>
         public static IRoute Search(IRouteFactory routeFactory) => Search(routeFactory.Create());
 
         /// <inheritdoc cref="IRoute.Search"/>
-        public static IRoute Search(IRoute route) => _route.Search(route);
+        public static IRoute Search(IRoute route) => combinedRouter.Search(route);
 
         /// <inheritdoc cref="Replace(IRouteFactory)"/>
-        public static async UniTask<IRoute> Replace(IRouteFactory routeFactory) => await Replace(routeFactory.Create());
+        public static UniTask Replace(params RouterRouteFactory[] routeFactories) => Replace(routeFactories.ToRouterRoutes());
 
         /// <summary>
         /// Replaces the tip of the current route stack by the given route.
         /// </summary>
         /// <param name="route">The route replacing the tip.</param>
-        public static async UniTask<IRoute> Replace(IRoute route)
+        public static UniTask Replace(params RouterRoute[] routes)
         {
-            if (Logging) Debug.Log($"{LoggingPrefix} Replace: {route.Name}");
-
-            return await LoadRouteAsync(_route.Pop().Push(route));
+            foreach (var tuple in routes) combinedRouter.SetCurrentRouter(tuple.router).Replace(tuple.route);
+            return combinedRouter.Load();
         }
 
         /// <inheritdoc cref="Root(IRouteFactory)"/>
-        public static async UniTask<IRoute> Root(IRouteFactory routeFactory) => await Root(routeFactory.Create());
+        public static UniTask Root(params RouterRouteFactory[] routeFactories) => Root(routeFactories.ToRouterRoutes());
 
         /// <summary>
         /// Replaces the current root and its history by the given route.
         /// </summary>
         /// <param name="route">The route replacing the root.</param>
-        public static async UniTask<IRoute> Root(IRoute route)
+        public static UniTask Root(params RouterRoute[] routes)
         {
-            if (Logging) Debug.Log($"{LoggingPrefix} Root: {route.Name}");
-
-            route.Previous = null;
-            route.IsSelfActive = true;
-
-            return await LoadRouteAsync(route);
+            foreach (var tuple in routes) combinedRouter.SetCurrentRouter(tuple.router).Root(tuple.route);
+            return combinedRouter.Load();
         }
 
         /// <summary>
         /// Asks the <see cref="SceneLoader"/> to reload the current route tip.
         /// </summary>
-        public static async UniTask<IRoute> Reload()
-        {
-            if (Logging) Debug.Log($"{LoggingPrefix} Reload: {_route.Name}");
+        public static UniTask Reload() => combinedRouter.Load();
 
-            return await LoadRouteAsync(_route);
-        }
-
-        public static bool IsRouteReady() => _route != null;
-
-        /// <summary>
-        /// Loads the specified route's scene group asynchronously.
-        /// </summary>
-        /// <param name="route">The route whose associated scene group will be loaded.</param>
-        /// <returns>A task that represents the asynchronous operation of loading the scene group.</returns>
-        public static async UniTask<IRoute> LoadRouteAsync(IRoute route)
-        {
-            CancelRouting();
-            cts = new CancellationTokenSource();
-            var token = cts.Token;
-
-            _route = route.GetTip();
-
-            if (Logging) Debug.Log($"{LoggingPrefix} {_route.GetRoot().ToString()}");
-
-            OnRouteLoadStart.Invoke(route);
-            await SceneLoader.SceneLoader.SetActiveSceneContainers(route.Scenes, cancellationToken: token);
-
-            if (route.ActiveScene != null) SceneLoader.SceneLoader.SetActiveScene(route.ActiveScene);
-
-            if (route.BakingSetActiveScene != null) SceneLoader.SceneLoader.SetBakingSet(route.BakingSetActiveScene);
-
-            OnRouteLoadEnd.Invoke(route);
-            return route;
-        }
-
-        public static void CancelRouting()
-        {
-            cts?.Cancel();
-            cts?.Dispose();
-            cts = null;
-        }
+        public static bool IsRouteReady() => combinedRouter.IsRouteReady();
     }
 }

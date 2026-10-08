@@ -8,22 +8,22 @@ namespace UExtension.Navigation.Route
         /// <summary>
         /// The unique name of the route, used as an identifier.
         /// </summary>
-        public string Name { get; }
+        string Name { get; }
 
         /// <summary>
         /// The scenes to be loaded with this route.
         /// </summary>
-        public List<SceneContainer> Scenes { get; }
+        List<SceneContainer> Scenes { get; }
 
         /// <summary>
         /// The scene to set active in Unity with this route.
         /// </summary>
-        public SceneContainer ActiveScene { get; }
+        SceneContainer ActiveScene { get; }
 
         /// <summary>
         /// The scene to set active in Unity's Baking Set with this route. 
         /// </summary>
-        public SceneContainer BakingSetActiveScene { get; }
+        SceneContainer BakingSetActiveScene { get; }
 
         /// <summary>
         /// Gets or sets the preceding <see cref="IRoute"/> of this route.
@@ -31,7 +31,7 @@ namespace UExtension.Navigation.Route
         /// <remarks>
         /// This value is null if there is no preceding route. Use <see cref="HasPrevious"/> to check for existence.
         /// </remarks>
-        public IRoute Previous { get; set; }
+        IRoute Previous { get; set; }
 
         /// <summary>
         /// Gets or sets the succeeding <see cref="IRoute"/> of this route.
@@ -39,7 +39,7 @@ namespace UExtension.Navigation.Route
         ///  /// <remarks>
         /// This value is null if there is no succeeding route. Use <see cref="HasNext"/> to check for existence.
         /// </remarks>
-        public IRoute Next { get; set; }
+        IRoute Next { get; set; }
 
         /// <summary>
         /// Gets or sets the active state of this route.
@@ -63,43 +63,43 @@ namespace UExtension.Navigation.Route
         /// </summary>
         /// <param name="route">The route to be added.</param>
         /// <returns>The updated route tip after the operation.</returns>
-        public IRoute Push(IRoute route);
+        IRoute Push(IRoute route);
 
         /// <summary>
         /// Removes this route from the current route stack if <see cref="HasPrevious"/>.
         /// </summary>
         /// <returns>The updated route tip after the operation.</returns>
-        public IRoute Pop();
+        IRoute Pop();
 
         /// <summary>
         /// Removes the given route from the current route stack if <see cref="HasPrevious"/>.
         /// </summary>
         /// <returns>The updated route tip after the operation.</returns>
-        public IRoute Pop(IRoute route);
-        
+        IRoute Pop(IRoute route);
+
         /// <summary>
         /// Navigates backwards to the specified route, pushes it as the tip if it does not exist in history.
         /// </summary>
         /// <param name="route">The route to navigate to.</param>
         /// <returns>The updated route tip after the operation.</returns>
-        public IRoute Navigate(IRoute route);
+        IRoute Navigate(IRoute route);
 
         /// <summary>
         /// Retrieves the root route from the current route stack.
         /// </summary>
-        public IRoute GetRoot();
+        IRoute GetRoot();
 
         /// <summary>
         /// Retrieves the tip of the current route stack.
         /// </summary>
-        public IRoute GetTip();
+        IRoute GetTip();
 
         /// <summary>
         /// Searches for a specified route starting from the current route backward through any previous routes.
         /// </summary>
         /// <param name="route">The route to search for.</param>
         /// <returns>The matching route if found; otherwise, null.</returns>
-        public IRoute Search(IRoute route);
+        IRoute Search(IRoute route);
 
         /// <summary>
         /// Determines whether a preceding route exists.
@@ -117,6 +117,6 @@ namespace UExtension.Navigation.Route
         /// Returns a string representation of the current route.
         /// </summary>
         /// <returns>A string representation of the current route.</returns>
-        public string ToString();
+        string ToString();
     }
 }
